@@ -8,7 +8,7 @@ const dbPath = process.env.DB_PATH || "jcu.db";
 const sqlite = new Database(dbPath);
 export const db = drizzle(sqlite);
 
-// Ensure tables exist (including new columns added since v1)
+// Ensure tables exist
 sqlite.exec(`
   CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -30,17 +30,6 @@ sqlite.exec(`
     onboarding_complete INTEGER NOT NULL DEFAULT 0,
     created_at INTEGER NOT NULL
   );
-
-  -- Add new columns if they don't exist (safe migrations)
-  ALTER TABLE users ADD COLUMN birth_name TEXT;
-  ALTER TABLE users ADD COLUMN birthdate TEXT;
-  ALTER TABLE users ADD COLUMN character_name TEXT;
-  ALTER TABLE users ADD COLUMN current_location TEXT;
-  ALTER TABLE users ADD COLUMN sun_sign TEXT;
-  ALTER TABLE users ADD COLUMN earth_chart_data TEXT;
-  ALTER TABLE users ADD COLUMN jcu_chart_data TEXT;
-  ALTER TABLE users ADD COLUMN jcu_birth_timestamp INTEGER;
-  ALTER TABLE users ADD COLUMN content_category TEXT;
 
   CREATE TABLE IF NOT EXISTS sessions (
     id TEXT PRIMARY KEY,
@@ -72,13 +61,6 @@ sqlite.exec(`
     content_url TEXT,
     created_at INTEGER NOT NULL
   );
-
-  -- Add new content_items columns if needed
-  ALTER TABLE content_items ADD COLUMN price REAL;
-  ALTER TABLE content_items ADD COLUMN stripe_price_id TEXT;
-  ALTER TABLE content_items ADD COLUMN stripe_product_id TEXT;
-  ALTER TABLE content_items ADD COLUMN is_for_sale INTEGER NOT NULL DEFAULT 0;
-  ALTER TABLE content_items ADD COLUMN content_url TEXT;
 
   CREATE TABLE IF NOT EXISTS orders (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
